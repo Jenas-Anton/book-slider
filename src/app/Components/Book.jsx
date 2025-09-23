@@ -17,7 +17,8 @@ import {
 import { useFrame } from "@react-three/fiber";
 import { useHelper, useTexture } from "@react-three/drei";
 import { degToRad } from "three/src/math/MathUtils";
-
+import { useAtom } from "jotai";
+import { pageAtom } from "./UI";
 
 const PAGE_WIDTH = 1.28;
 const PAGE_HEIGHT = 1.71;
@@ -85,7 +86,7 @@ pages.forEach((page) => {
   useTexture.preload(`/textures/book-cover-rough.jpg`);
 })
 
-const Page = ({ number, front, back, ...props }) => {
+const Page = ({ number, front, back,page,  ...props }) => {
 const [picture, picture2, pictureRoughness] = useTexture([
   `/textures/${front}.jpg`,
   `/textures/${back}.jpg`,
@@ -163,19 +164,22 @@ const [picture, picture2, pictureRoughness] = useTexture([
 
   return (
     <group {...props} ref={group}>
-      <primitive object={manualSkinnedMesh} ref={SkinnedMeshRef}/>
+      <primitive object={manualSkinnedMesh}
+      ref={SkinnedMeshRef}
+      position-z = {-number * PAGE_DEPTH + page * PAGE_DEPTH}/>
     </group>
   );
 };
 
 export const Book = ({ ...props }) => {
+  const [page] = useAtom(pageAtom);
   return (
     <group {...props}>
       {pages.map((pageData, index) =>
 
           <Page
-            position-x={index * 0.15}
             key={index}
+            page = {page}
             number={index}
             {...pageData}
           />
