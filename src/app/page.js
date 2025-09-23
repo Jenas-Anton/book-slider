@@ -9,6 +9,7 @@ export default function Page() {
       <div className={styles.background} />
 
       <main >
+        {/* <UI /> commented */}
         <Experience />
       </main>
     </>

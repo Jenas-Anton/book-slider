@@ -1,14 +1,20 @@
 "use client"
-import { useRef } from "react"
+import { useRef , useMemo } from "react"
 import { pages } from "./UI"
-import { useMemo } from "react";
-import { Bone } from "three";
+
+import { Bone, MeshStandardMaterial, SkeletonHelper } from "three";
 import { 
   BoxGeometry, 
   Vector3, 
   Uint16BufferAttribute, 
-  Float32BufferAttribute 
+  Float32BufferAttribute,
+  Color,
+  Skeleton,
+  SkinnedMesh
 } from "three";
+import { useFrame } from "@react-three/fiber";
+import { useHelper } from "@react-three/drei";
+import { degToRad } from "three/src/math/MathUtils";
 
 const PAGE_WIDTH = 1.28;
 const PAGE_HEIGHT = 1.71;
@@ -52,10 +58,33 @@ pageGeometry.setAttribute(
   new Float32BufferAttribute(skinWeights, 4)
 );
 
-const Page = ({ number, front, back, ...props }) => {
-  const group = useRef();
+const whitecolor = new Color("white");
 
-   const manualSkinnedMesh = useMemo(() => {
+const pageMaterials = [
+  new MeshStandardMaterial({
+    color : whitecolor,
+  }),
+  new MeshStandardMaterial({
+    color: "#111",
+  }),
+  new MeshStandardMaterial({
+    color: whitecolor,
+  }),
+  new MeshStandardMaterial({
+    color: whitecolor,
+  }),
+  new MeshStandardMaterial({
+    color: "pink",
+  }),
+  new MeshStandardMaterial({
+    color: "blue",
+  })
+];
+
+const Page = ({ number, front, back, ...props }) => {
+    const group = useRef();
+    const SkinnedMeshRef = useRef()
+    const manualSkinnedMesh = useMemo(() => {
     const bones = [];
     for (let i = 0 ; i <= PAGE_SEGMENTS; i++)
     {
@@ -64,15 +93,42 @@ const Page = ({ number, front, back, ...props }) => {
         if(i == 0)
         {
             bone.position.x = 0 ;
+        }else{
+          bone.position.x = SEGMENT_WIDTH;
+        }
+
+        if(i > 0 )
+        {
+          bones[i-1].add(bone);
         }
     }
-   })
+
+    const skeleton = new Skeleton(bones);
+    const materials = pageMaterials ; 
+    const mesh = new SkinnedMesh(pageGeometry , materials);
+    mesh.castShadow = true;
+    mesh.recieveShadow = true;
+    mesh.frustumCulled = false;
+    mesh.add(skeleton.bones[0]);
+    mesh.bind(skeleton);
+    return mesh;
+   } , []);
+
+
+  useFrame(() => {
+    if(!SkinnedMeshRef.current)
+    {
+      return;
+    }
+    const bones = SkinnedMeshRef.current.skeleton.bones;
+
+    bones[2].rotation.y = degToRad(40);
+  })
+
 
   return (
     <group {...props} ref={group}>
-      <mesh scale={0.5} geometry={pageGeometry}>
-        <meshBasicMaterial color="red" />
-      </mesh>
+      <primitive object={manualSkinnedMesh} ref={SkinnedMeshRef}/>
     </group>
   );
 };
