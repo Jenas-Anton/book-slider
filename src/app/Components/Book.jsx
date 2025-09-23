@@ -10,11 +10,14 @@ import {
   Float32BufferAttribute,
   Color,
   Skeleton,
-  SkinnedMesh
+  SkinnedMesh,
+  TextureLoader ,
+  SRGBColorSpace
 } from "three";
 import { useFrame } from "@react-three/fiber";
-import { useHelper } from "@react-three/drei";
+import { useHelper, useTexture } from "@react-three/drei";
 import { degToRad } from "three/src/math/MathUtils";
+
 
 const PAGE_WIDTH = 1.28;
 const PAGE_HEIGHT = 1.71;
@@ -73,15 +76,26 @@ const pageMaterials = [
   new MeshStandardMaterial({
     color: whitecolor,
   }),
-  new MeshStandardMaterial({
-    color: "pink",
-  }),
-  new MeshStandardMaterial({
-    color: "blue",
-  })
+
 ];
 
+pages.forEach((page) => {
+  useTexture.preload(`/textures/${page.front}.jpg`);
+  useTexture.preload(`/textures/${page.back}.jpg`);
+  useTexture.preload(`/textures/book-cover-rough.jpg`);
+})
+
 const Page = ({ number, front, back, ...props }) => {
+const [picture, picture2, pictureRoughness] = useTexture([
+  `/textures/${front}.jpg`,
+  `/textures/${back}.jpg`,
+  ...(number === 0 || number === pages.length - 1
+    ? ['/textures/book-cover-roughness.jpg']
+    : []),
+]);
+
+  picture.colorSpace = picture2.colorSpace = SRGBColorSpace;
+
     const group = useRef();
     const SkinnedMeshRef = useRef()
     const manualSkinnedMesh = useMemo(() => {
@@ -104,7 +118,28 @@ const Page = ({ number, front, back, ...props }) => {
     }
 
     const skeleton = new Skeleton(bones);
-    const materials = pageMaterials ; 
+    const materials = [...pageMaterials , 
+      new MeshStandardMaterial({
+        color : whitecolor,
+        map : picture , 
+        ...(number === 0? {
+          roughnessMap : pictureRoughness,
+        }:
+        {
+          roughness : 0.1,
+        })
+      }),
+      new MeshStandardMaterial({
+        color : whitecolor,
+        map : picture2, 
+        ...(number === pages.length - 1? {
+          roughnessMap : pictureRoughness,
+        }:
+        {
+          roughness : 0.1,
+        })
+      })
+    ]
     const mesh = new SkinnedMesh(pageGeometry , materials);
     mesh.castShadow = true;
     mesh.recieveShadow = true;
@@ -115,15 +150,15 @@ const Page = ({ number, front, back, ...props }) => {
    } , []);
 
 
-  useFrame(() => {
-    if(!SkinnedMeshRef.current)
-    {
-      return;
-    }
-    const bones = SkinnedMeshRef.current.skeleton.bones;
+  // useFrame(() => {
+  //   if(!SkinnedMeshRef.current)
+  //   {
+  //     return;
+  //   }
+  //   const bones = SkinnedMeshRef.current.skeleton.bones;
 
-    bones[2].rotation.y = degToRad(40);
-  })
+  //   bones[2].rotation.y = degToRad(40);
+  // })
 
 
   return (
@@ -137,14 +172,14 @@ export const Book = ({ ...props }) => {
   return (
     <group {...props}>
       {pages.map((pageData, index) =>
-        index === 0 ? (
+
           <Page
             position-x={index * 0.15}
             key={index}
             number={index}
             {...pageData}
           />
-        ) : null
+
       )}
     </group>
   );
