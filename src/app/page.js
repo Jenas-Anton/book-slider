@@ -1,5 +1,4 @@
 "use client"
-import Experience from "./Components/Experience";
 import styles from "./Page.module.css";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";

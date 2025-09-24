@@ -19,7 +19,6 @@ import {
 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
 
-// Default page-turning parameters
 const DEFAULT_EASING = {
   easingFactor: 0.5,
   easingFactorFold: 0.3,
@@ -34,7 +33,6 @@ const PAGE_DEPTH = 0.003;
 const PAGE_SEGMENTS = 30;
 const SEGMENT_WIDTH = PAGE_WIDTH / PAGE_SEGMENTS;
 
-// Shared page geometry
 const pageGeometry = new BoxGeometry(
   PAGE_WIDTH,
   PAGE_HEIGHT,
@@ -44,7 +42,6 @@ const pageGeometry = new BoxGeometry(
 );
 pageGeometry.translate(PAGE_WIDTH / 2, 0, 0);
 
-// Skinning attributes
 const position = pageGeometry.attributes.position;
 const vertex = new Vector3();
 const skinIndexes = [];
@@ -80,7 +77,6 @@ const pageMaterials = [
   new MeshStandardMaterial({ color: whiteColor }),
 ];
 
-// --------- Page Component ----------
 const Page = ({
   number,
   front,
@@ -212,7 +208,7 @@ const Page = ({
   );
 };
 
-// --------- Book Component ----------
+
 export const Book = ({ pictures = [], params = DEFAULT_EASING, ...props }) => {
   const [page, setPage] = useState(0);
   const [delayedPage, setDelayedPage] = useState(page);
