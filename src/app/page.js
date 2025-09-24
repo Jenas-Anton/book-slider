@@ -10,6 +10,7 @@ export default function Page() {
 
       <main >
         {/* <UI /> commented */}
+        <UI/>
         <Experience />
       </main>
     </>
