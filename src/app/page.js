@@ -1,5 +1,5 @@
 "use client"
-import styles from "./Page.module.css";
+import styles from "./page.module.css";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Environment } from "@react-three/drei";
 import { Book } from "./Components/Book";
