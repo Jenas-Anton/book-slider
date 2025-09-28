@@ -13,11 +13,11 @@ export default function Page() {
           <Canvas
       style={{ width: "100vw", height: "100vh" }}
     >
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[2, 5, 2]} intensity={1} />
+      <ambientLight intensity={1} />
+      {/* <directionalLight position={[0 , 0 , 2]} intensity={2} /> */}
       <Book pictures= {pictures} position={[0, 0, 0]} />
       <OrbitControls enableZoom enablePan={false} />
-      <Environment preset="studio" />
+      <Environment preset="city"  />
     </Canvas>
       </main>
     </>

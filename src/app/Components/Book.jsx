@@ -115,14 +115,14 @@ const Page = ({
       new MeshStandardMaterial({
         color: whiteColor,
         map: picture,
-        roughness: 0.1,
+        roughness: 1,
         emissive: emissiveColor,
         emissiveIntensity: 0,
       }),
       new MeshStandardMaterial({
         color: whiteColor,
         map: picture2,
-        roughness: 0.1,
+        roughness: 1,
         emissive: emissiveColor,
         emissiveIntensity: 0,
       }),
