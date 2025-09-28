@@ -90,8 +90,8 @@ const Page = ({
   const { easingFactor, easingFactorFold, insideCurveStrength, outsideCurveStrength, turningCurveStrength } = params;
 
   const [picture, picture2] = useTexture([
-    `/textures/${front}.jpg`,
-    `/textures/${back}.jpg`,
+    `/images/${front}.jpg`,
+    `/images/${back}.jpg`,
   ]);
   picture.colorSpace = picture2.colorSpace = SRGBColorSpace;
 
