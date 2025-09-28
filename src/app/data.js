@@ -9,6 +9,6 @@ export const pictures = [
   "Franky",
   "Brook",
   "Jinbe",
-  "image",
-  "image copy"
+  "map1",
+  "map2",
 ];
