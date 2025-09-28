@@ -13,7 +13,7 @@ export default function Page() {
         >
       <ambientLight intensity={1} />
       {/* <directionalLight position={[0 , 0 , 2]} intensity={2} /> */}
-      <Book pictures= {pictures} position={[0, 0, 0]} />
+      <Book pictures= {pictures} position={[0, 0, 2.5]} />
       <OrbitControls enableZoom enablePan={false} />
       <Environment preset="city"  />
     </Canvas>
