@@ -10,10 +10,11 @@ export default function Page() {
       <main>
         <Canvas
           style={{ width: "100vw", height: "100vh" }}
+          camera={{ position: [0, 0, 3], fov: 50 }}
         >
       <ambientLight intensity={1} />
       {/* <directionalLight position={[0 , 0 , 2]} intensity={2} /> */}
-      <Book pictures= {pictures} position={[0, 0, 2.5]} />
+      <Book pictures= {pictures} position={[0, 0, 0]} />
       <OrbitControls enableZoom enablePan={false} />
       <Environment preset="city"  />
     </Canvas>
